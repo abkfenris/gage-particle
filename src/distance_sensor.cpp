@@ -2,10 +2,12 @@
 
 #include "distance_sensor.h"
 
-const int MINIMUM_READABLE_DISTANCE = 500;
+#define MINIMUM_READABLE_DISTANCE_MM 500
+#define MINIMUM_BETWEEN_READINGS_MS 200
 
 void DistanceSensor::setup()
 {
+    last_update_ms = millis() - MINIMUM_BETWEEN_READINGS_MS;
     Serial1.begin(9600);
 }
 
@@ -16,34 +18,36 @@ void DistanceSensor::loop()
 
 int DistanceSensor::read_sensor()
 {
-
-    while (Serial1.available())
+    if (millis() - last_update_ms >= MINIMUM_BETWEEN_READINGS_MS)
     {
-        if (Serial1.peek() == 'R')
+        while (Serial1.available())
         {
-            // pop off the R
-            Serial1.read();
-
-            for (int i = 0; i < 4; i++)
+            if (Serial1.peek() == 'R')
             {
-                char data = Serial1.read();
-                buf[i] = data;
+                // pop off the R
+                Serial1.read();
+
+                for (int i = 0; i < 4; i++)
+                {
+                    char data = Serial1.read();
+                    buf[i] = data;
+                }
+
+                int distance_mm = atoi(buf);
+
+                if (MINIMUM_READABLE_DISTANCE_MM <= distance_mm)
+                {
+                    return distance_mm;
+                }
+            }
+            else
+            {
+                // Not an R, try to clear
+                Serial1.read();
             }
 
-            int distance_mm = atoi(buf);
-
-            if (MINIMUM_READABLE_DISTANCE <= distance_mm)
-            {
-                return distance_mm;
-            }
+            delay(50);
         }
-        else
-        {
-            // Not an R, try to clear
-            Serial1.read();
-        }
-
-        delay(50);
     }
 }
 

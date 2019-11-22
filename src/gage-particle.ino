@@ -9,6 +9,7 @@
 #include "communicate.h"
 #include "temp_sensor.h"
 #include "distance_sensor.h"
+#include "network.h"
 
 #define DHTPIN A2                              // temperature sensor pin
 const int DEFAULT_UBIDOTS_UPDATE_SECONDS = 30; // Default amount of time between updating Ubidots
@@ -18,6 +19,7 @@ char *WEBHOOK_NAME = "Ubidots";                // Webhook name that Ubidots list
 
 SettingManager setting_manager(DEFAULT_UBIDOTS_UPDATE_SECONDS);
 
+NetworkManager network_manager;
 TempSensor tempSensor(DHTPIN);
 Communicate communicate(WEBHOOK_NAME, 1000 * setting_manager.current_settings().ubidots_update_frequency_s);
 DistanceSensor distance;
@@ -29,6 +31,8 @@ void setup()
   setting_manager.setup();
   Serial.println(setting_manager.setting_string());
 
+  network_manager.setup();
+
   Serial.println("Begin readings!");
 
   tempSensor.setup();
@@ -38,6 +42,9 @@ void setup()
 
 void loop()
 {
+  setting_manager.loop();
+  network_manager.loop();
+
   tempSensor.loop();
   communicate.add_value("temperature", tempSensor.value());
 

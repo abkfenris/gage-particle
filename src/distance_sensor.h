@@ -9,6 +9,7 @@ class DistanceSensor : public Sensor
 {
 private:
     int last_distance_mm;
+    int last_update_ms;
     char buf[5];
 
 public:

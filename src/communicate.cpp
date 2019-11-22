@@ -14,22 +14,25 @@ void Communicate::setup()
 
 void Communicate::loop()
 {
-    if (millis() - last_update_ms >= update_interval_ms)
+    if (update_interval_ms != 0)
     {
-        last_update_ms = millis(); // Reset last update time
-
-        std::map<char *, float>::iterator iter;
-        for (iter = data.begin(); iter != data.end(); iter++)
+        if (millis() - last_update_ms >= update_interval_ms)
         {
-            char *key = iter->first;
-            float value = iter->second;
+            last_update_ms = millis(); // Reset last update time
 
-            ubidots.add(key, value);
+            std::map<char *, float>::iterator iter;
+            for (iter = data.begin(); iter != data.end(); iter++)
+            {
+                char *key = iter->first;
+                float value = iter->second;
+
+                ubidots.add(key, value);
+            }
+
+            ubidots.send(webhook_name, PUBLIC);
+
+            data.clear();
         }
-
-        ubidots.send(webhook_name, PUBLIC);
-
-        data.clear();
     }
 }
 
@@ -37,7 +40,6 @@ void Communicate::add_value(char *key, float value)
 {
     if (!isnan(value))
     {
-        // ubidots.add(key, value);
         data[key] = value;
     }
 }
