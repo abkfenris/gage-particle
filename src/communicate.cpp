@@ -8,7 +8,7 @@ Communicate::Communicate(char *set_webhook_name, long set_update_interval_ms) : 
 
 void Communicate::setup()
 {
-    last_update_ms = millis();
+    last_update_ms = millis() - update_interval_ms;
     ubidots.setDebug(true);
 }
 

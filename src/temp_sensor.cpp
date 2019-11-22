@@ -13,8 +13,7 @@ void TempSensor::loop()
 {
 }
 
-float TempSensor::tempF()
+float TempSensor::value()
 {
     return dht.getTempFarenheit();
 }
-

@@ -33,10 +33,10 @@ void setup()
 void loop()
 {
   tempSensor.loop();
-  communicate.add_value("temperature", tempSensor.tempF());
+  communicate.add_value("temperature", tempSensor.value());
 
   distance.loop();
-  communicate.add_value("distance", distance.get_distance());
+  communicate.add_value("distance", distance.value());
 
   communicate.loop();
 }

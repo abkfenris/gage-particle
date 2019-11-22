@@ -3,12 +3,13 @@
 
 #include "Particle.h"
 
-class DistanceSensor
+#include "sensor.h"
+
+class DistanceSensor : public Sensor
 {
 private:
     int last_distance_mm;
     char buf[5];
-
 
 public:
     void setup();
@@ -16,7 +17,7 @@ public:
 
     int read_sensor();
 
-    float get_distance();
+    float value();
 };
 
 #endif

@@ -6,7 +6,9 @@
 #include "math.h"
 #include "map"
 
-class Communicate
+#include "runnable.h"
+
+class Communicate : public Runnable
 {
 private:
     Ubidots ubidots;

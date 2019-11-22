@@ -47,7 +47,7 @@ int DistanceSensor::read_sensor()
     }
 }
 
-float DistanceSensor::get_distance()
+float DistanceSensor::value()
 {
     return last_distance_mm;
 }

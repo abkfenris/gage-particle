@@ -4,7 +4,9 @@
 #include "Particle.h"
 #include "Grove_Temperature_And_Humidity_Sensor.h"
 
-class TempSensor
+#include "sensor.h"
+
+class TempSensor : public Sensor
 {
 private:
     DHT dht;
@@ -14,8 +16,7 @@ public:
 
     void setup();
     void loop();
-
-    float tempF();
+    float value();
 };
 
 #endif
