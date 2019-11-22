@@ -50,6 +50,7 @@ void loop()
 
   distance.loop();
   communicate.add_value("distance", distance.value());
+  communicate.add_value("std_dev", distance.std_deviation());
 
   communicate.loop();
 }
