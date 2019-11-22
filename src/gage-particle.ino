@@ -10,24 +10,25 @@
 #include "temp_sensor.h"
 #include "distance_sensor.h"
 
-#define DHTPIN A2 // temperature sensor pin
+#define DHTPIN A2                              // temperature sensor pin
+const int DEFAULT_UBIDOTS_UPDATE_SECONDS = 30; // Default amount of time between updating Ubidots
+char *WEBHOOK_NAME = "Ubidots";                // Webhook name that Ubidots listens to
 
-const long UPDATE_INTERVAL_MS = 300000;
+// SYSTEM_THREAD(ENABLED);
 
-const int UBIDOTS_UPDATE_SECONDS_TEST = 30;
-
-char *WEBHOOK_NAME = "Ubidots";
-
-SettingManager setting_manager(UBIDOTS_UPDATE_SECONDS_TEST);
+SettingManager setting_manager(DEFAULT_UBIDOTS_UPDATE_SECONDS);
 
 TempSensor tempSensor(DHTPIN);
-Communicate communicate(WEBHOOK_NAME, UPDATE_INTERVAL_MS);
+Communicate communicate(WEBHOOK_NAME, 1000 * setting_manager.current_settings().ubidots_update_frequency_s);
 DistanceSensor distance;
 
 void setup()
 {
   Serial.begin(9600);
-  setting_manager.print_settings();
+
+  setting_manager.setup();
+  Serial.println(setting_manager.setting_string());
+
   Serial.println("Begin readings!");
 
   tempSensor.setup();

@@ -54,6 +54,38 @@ String SettingManager::setting_string()
     return message;
 };
 
-void SettingManager::setup(){};
+void SettingManager::setup()
+{
+    Particle.function("settings-ubidots_update_seconds",
+                      &SettingManager::change_ubidot_update_seconds,
+                      this);
+};
 
 void SettingManager::loop(){};
+
+int SettingManager::change_ubidot_update_seconds(String message)
+{
+    Serial.println("Recieved new ubidots function");
+    int value;
+    if (message.toLowerCase() == "stop")
+    {
+        value = 0;
+    }
+    else
+    {
+        int result = message.toInt();
+        if (result != 0)
+        {
+            value = result;
+        }
+    }
+
+    Serial.print("Recieved new ubidots value: ");
+    Serial.println(value);
+
+    if (value != settings.ubidots_update_frequency_s)
+    {
+        settings.ubidots_update_frequency_s = value;
+        persist_to_eeprom();
+    }
+}

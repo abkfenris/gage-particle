@@ -92,6 +92,18 @@ public:
 
     // Return the current settings as a string for logging or print
     String setting_string();
+
+    /**
+     * Cloud function to control how many seconds between
+     * Ubidots updates being sent. "Stop" will disable updates.
+     * 
+     * @param message Seconds as a string between updates.
+     * Will be converted into an int.
+     * 
+     * @returns Number of seconds set between updates, or -1
+     * if unable to interpert the message.
+     */
+    int change_ubidot_update_seconds(String message);
 };
 
 #endif
