@@ -12,14 +12,17 @@
  */
 
 #include "settings.h"
-#include "communicate.h"
+#include "network.h"
+
+#include "logging/data_logger_manager.h"
+#include "logging/ubidots_logger.h"
+
 #include "temp_sensor.h"
 #include "distance_sensor.h"
-#include "network.h"
 
 void setup();
 void loop();
-#line 14 "/Users/akerney/Geek/Gage/gage-particle/src/gage-particle.ino"
+#line 17 "/Users/akerney/Geek/Gage/gage-particle/src/gage-particle.ino"
 #define DHTPIN A2                              // temperature sensor pin
 const int DEFAULT_UBIDOTS_UPDATE_SECONDS = 30; // Default amount of time between updating Ubidots
 char *WEBHOOK_NAME = "Ubidots";                // Webhook name that Ubidots listens to
@@ -29,8 +32,11 @@ char *WEBHOOK_NAME = "Ubidots";                // Webhook name that Ubidots list
 SettingManager setting_manager(DEFAULT_UBIDOTS_UPDATE_SECONDS);
 
 NetworkManager network_manager;
+
+DataLoggerManager logger_manager;
+UbidotsLogger ubidots_logger(WEBHOOK_NAME, setting_manager.current_settings());
+
 TempSensor tempSensor(DHTPIN);
-Communicate communicate(WEBHOOK_NAME, 1000 * setting_manager.current_settings().ubidots_update_frequency_s);
 DistanceSensor distance;
 
 void setup()
@@ -42,10 +48,12 @@ void setup()
 
   network_manager.setup();
 
+  logger_manager.add_logger(ubidots_logger);
+  logger_manager.setup();
+
   Serial.println("Begin readings!");
 
   tempSensor.setup();
-  communicate.setup();
   distance.setup();
 }
 
@@ -55,11 +63,13 @@ void loop()
   network_manager.loop();
 
   tempSensor.loop();
-  communicate.add_value("temperature", tempSensor.value());
+  logger_manager.add_value("temperature", tempSensor.value());
 
   distance.loop();
-  communicate.add_value("distance", distance.value());
-  communicate.add_value("std_dev", distance.std_deviation());
 
-  communicate.loop();
+  logger_manager.add_value("distance", distance.value());
+  logger_manager.add_value("std_dev", distance.std_deviation());
+
+  logger_manager.update_settings(setting_manager.current_settings());
+  logger_manager.loop();
 }
