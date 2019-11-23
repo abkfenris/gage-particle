@@ -1,20 +1,18 @@
-#include "math.h"
-
-#include "distance_sensor.h"
+#include "maxbotix_serial_distance.h"
 
 #define MINIMUM_READABLE_DISTANCE_MM 500
 #define MAXIMUM_READABLE_DISTANCE_MM 9999
 #define MINIMUM_BETWEEN_READINGS_MS 200
 
-DistanceSensor::DistanceSensor() : stats(NUMBER_OF_SAMPLES){};
+MaxbotixDistanceSensor::MaxbotixDistanceSensor() : stats(NUMBER_OF_SAMPLES){};
 
-void DistanceSensor::setup()
+void MaxbotixDistanceSensor::setup()
 {
     last_update_ms = millis() - MINIMUM_BETWEEN_READINGS_MS;
     Serial1.begin(9600);
 }
 
-void DistanceSensor::loop()
+void MaxbotixDistanceSensor::loop()
 {
     if (millis() - last_update_ms >= MINIMUM_BETWEEN_READINGS_MS)
     {
@@ -23,11 +21,14 @@ void DistanceSensor::loop()
         {
             stats.addData(distance_mm);
             last_update_ms = millis();
+
+            DataLog.add_value("distance", value());
+            DataLog.add_value("std_dev", std_deviation());
         }
     }
 }
 
-int DistanceSensor::read_sensor()
+int MaxbotixDistanceSensor::read_sensor()
 {
 
     while (Serial1.available())
@@ -59,12 +60,12 @@ int DistanceSensor::read_sensor()
     }
 }
 
-float DistanceSensor::value()
+float MaxbotixDistanceSensor::value()
 {
     return stats.mean();
 }
 
-float DistanceSensor::std_deviation()
+float MaxbotixDistanceSensor::std_deviation()
 {
     return stats.stdDeviation();
 }

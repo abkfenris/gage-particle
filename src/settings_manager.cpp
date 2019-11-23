@@ -13,7 +13,7 @@ void SettingManager::setup()
                       &SettingManager::change_ubidot_update_seconds,
                       this);
 
-    DataLog.log_message(setting_string());
+    print_settings();
 };
 
 void SettingManager::loop(){};
@@ -33,7 +33,6 @@ void SettingManager::get_from_eeprom()
 {
     EEPROM.get(SETTING_EEPROM_ADDRESS, settings);
 
-    // Upgrade if out of date
     if (settings.version < SETTING_CURRENT_VERSION || settings.version == SETTING_NULL_VERSION)
     {
         upgrade_settings();
@@ -53,7 +52,7 @@ struct Settings SettingManager::current_settings()
 
 void SettingManager::print_settings()
 {
-    Serial.println(setting_string());
+    DataLog.log_message(setting_string());
 };
 
 String SettingManager::setting_string()
@@ -67,7 +66,7 @@ String SettingManager::setting_string()
 
 int SettingManager::change_ubidot_update_seconds(String message)
 {
-    Serial.println("Recieved new ubidots function");
+    DataLog.log_message("Recieved new ubidots settings");
     int value;
     if (message.toLowerCase() == "stop")
     {
@@ -82,8 +81,7 @@ int SettingManager::change_ubidot_update_seconds(String message)
         }
     }
 
-    Serial.print("Recieved new ubidots value: ");
-    Serial.println(value);
+    DataLog.log_message(String("Recieved new ubidots value: " + String(value)));
 
     if (value != settings.ubidots_update_frequency_s)
     {

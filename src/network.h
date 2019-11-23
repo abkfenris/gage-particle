@@ -2,6 +2,7 @@
 #define Network_Manager_h
 
 #include "runnable.h"
+#include "logging/data_logger_manager.h"
 
 class NetworkManager : public Runnable
 {

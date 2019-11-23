@@ -3,13 +3,15 @@
  * 
  * @author Alex Kerney
  */
-#ifndef DistanceSensor_h
-#define DistanceSensor_h
+#ifndef MaxbotixDistanceSensor_h
+#define MaxbotixDistanceSensor_h
 
 #include "Particle.h"
 #include "stats/Statistics.h"
+#include "math.h"
 
-#include "sensor.h"
+#include "sensor/sensor.h"
+#include "logging/data_logger_manager.h"
 
 // Number of samples that should be kept in the statistics history
 const int NUMBER_OF_SAMPLES = 20;
@@ -17,7 +19,7 @@ const int NUMBER_OF_SAMPLES = 20;
 /**
  * Maxbotix Distance Sensor
  */
-class DistanceSensor : public Sensor
+class MaxbotixDistanceSensor : public Sensor
 {
 private:
     /**
@@ -28,7 +30,7 @@ private:
     int last_update_ms;
 
 public:
-    DistanceSensor();
+    MaxbotixDistanceSensor();
 
     /**
      * Starts the serial connection to the ultrasonic sensor,

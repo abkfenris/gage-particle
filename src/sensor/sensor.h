@@ -6,7 +6,7 @@
 #ifndef Sensor_h
 #define Sensor_h
 
-#include "runnable.h"
+#include "../runnable.h"
 
 /**
  * Sensors collect data about the environment or device.

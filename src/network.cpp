@@ -6,6 +6,7 @@ void NetworkManager::setup()
     Particle.function("wifi_add_network",
                       &NetworkManager::add_network,
                       this);
+    DataLog.log_message(current_networks());
 #endif
 }
 
@@ -28,8 +29,10 @@ int NetworkManager::add_network(String message)
 
     WiFi.setCredentials(ssid, password);
 
-    Serial.print("Added SSID: ");
-    Serial.println(ssid);
+    DataLog.log_message("Added SSID: ");
+    DataLog.log_message(ssid);
+
+    return 1;
 };
 
 String NetworkManager::current_networks()

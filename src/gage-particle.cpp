@@ -19,8 +19,8 @@
 #include "logging/ubidots_logger.h"
 #include "logging/serial_logger.h"
 
-#include "temp_sensor.h"
-#include "distance_sensor.h"
+#include "sensor/grove_temp.h"
+#include "sensor/maxbotix_serial_distance.h"
 
 void setup();
 void loop();
@@ -38,22 +38,17 @@ NetworkManager network_manager;
 UbidotsLogger ubidots_logger(WEBHOOK_NAME, setting_manager.current_settings());
 SerialLogger serial_logger;
 
-TempSensor tempSensor(DHTPIN);
-DistanceSensor distance;
+GroveTempSensor tempSensor(DHTPIN);
+MaxbotixDistanceSensor distance;
 
 void setup()
 {
-  Serial.begin(9600);
-
   DataLog.add_logger(ubidots_logger);
   DataLog.add_logger(serial_logger);
   DataLog.setup();
 
   setting_manager.setup();
   network_manager.setup();
-
-  // DataLog.log_message(setting_manager.setting_string());
-  DataLog.log_message(network_manager.current_networks());
 
   DataLog.log_message("Begin readings!");
 
@@ -67,12 +62,7 @@ void loop()
   network_manager.loop();
 
   tempSensor.loop();
-  DataLog.add_value("temperature", tempSensor.value());
-
   distance.loop();
-
-  DataLog.add_value("distance", distance.value());
-  DataLog.add_value("std_dev", distance.std_deviation());
 
   DataLog.update_settings(setting_manager.current_settings());
   DataLog.loop();

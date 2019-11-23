@@ -3,18 +3,19 @@
  * 
  * @author Alex Kerney
  */
-#ifndef TempSensor_h
-#define TempSensor_h
+#ifndef GroveTempSensor_h
+#define GroveTempSensor_h
 
 #include "Particle.h"
 #include "Grove_Temperature_And_Humidity_Sensor.h"
 
-#include "sensor.h"
+#include "sensor/sensor.h"
+#include "logging/data_logger_manager.h"
 
 /**
  * Grove Temperature Sensor
  */
-class TempSensor : public Sensor
+class GroveTempSensor : public Sensor
 {
 private:
     // Milliseconds when the sensor was last read
@@ -30,7 +31,7 @@ public:
      * 
      * @param dhtPin Pin on breakout board where sensor cable is connected
      */
-    TempSensor(byte dhtPin);
+    GroveTempSensor(byte dhtPin);
 
     // Start up temperature sensor
     void setup();
