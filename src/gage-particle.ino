@@ -5,10 +5,11 @@
  * Date: 2019-03-06
  */
 
-#include "settings.h"
+#include "logging/data_logger_manager.h"
+
+#include "settings_manager.h"
 #include "network.h"
 
-#include "logging/data_logger_manager.h"
 #include "logging/ubidots_logger.h"
 #include "logging/serial_logger.h"
 
@@ -25,7 +26,6 @@ SettingManager setting_manager(DEFAULT_UBIDOTS_UPDATE_SECONDS);
 
 NetworkManager network_manager;
 
-DataLoggerManager logger_manager;
 UbidotsLogger ubidots_logger(WEBHOOK_NAME, setting_manager.current_settings());
 SerialLogger serial_logger;
 
@@ -36,17 +36,17 @@ void setup()
 {
   Serial.begin(9600);
 
-  setting_manager.setup();
+  DataLog.add_logger(ubidots_logger);
+  DataLog.add_logger(serial_logger);
+  DataLog.setup();
 
+  setting_manager.setup();
   network_manager.setup();
 
-  logger_manager.add_logger(ubidots_logger);
-  logger_manager.add_logger(serial_logger);
-  logger_manager.setup();
-  logger_manager.log_message(setting_manager.setting_string());
-  logger_manager.log_message(network_manager.current_networks());
+  // DataLog.log_message(setting_manager.setting_string());
+  DataLog.log_message(network_manager.current_networks());
 
-  logger_manager.log_message("Begin readings!");
+  DataLog.log_message("Begin readings!");
 
   tempSensor.setup();
   distance.setup();
@@ -58,13 +58,13 @@ void loop()
   network_manager.loop();
 
   tempSensor.loop();
-  logger_manager.add_value("temperature", tempSensor.value());
+  DataLog.add_value("temperature", tempSensor.value());
 
   distance.loop();
 
-  logger_manager.add_value("distance", distance.value());
-  logger_manager.add_value("std_dev", distance.std_deviation());
+  DataLog.add_value("distance", distance.value());
+  DataLog.add_value("std_dev", distance.std_deviation());
 
-  logger_manager.update_settings(setting_manager.current_settings());
-  logger_manager.loop();
+  DataLog.update_settings(setting_manager.current_settings());
+  DataLog.loop();
 }

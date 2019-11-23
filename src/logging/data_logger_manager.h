@@ -60,4 +60,6 @@ public:
     void add_logger(DataLogger &logger);
 };
 
+extern DataLoggerManager DataLog;
+
 #endif

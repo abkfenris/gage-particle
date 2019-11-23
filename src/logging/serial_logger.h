@@ -46,6 +46,9 @@ public:
     // Log message to serial
     void log_message(String message);
 
+    // Formatted string of keys and values
+    String key_value_string();
+
     // Immediately log out values to serial
     void persist_values();
 

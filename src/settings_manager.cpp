@@ -1,4 +1,4 @@
-#include "settings.h"
+#include "settings_manager.h"
 
 SettingManager::SettingManager(int ubidots_update_frequency_s)
 {
@@ -7,11 +7,22 @@ SettingManager::SettingManager(int ubidots_update_frequency_s)
     get_from_eeprom();
 };
 
+void SettingManager::setup()
+{
+    Particle.function("settings-ubidots_update_seconds",
+                      &SettingManager::change_ubidot_update_seconds,
+                      this);
+
+    DataLog.log_message(setting_string());
+};
+
+void SettingManager::loop(){};
+
 void SettingManager::upgrade_settings()
 {
-    if (settings.version < VERSION_1 || settings.version == NULL_VERSION)
+    if (settings.version < SETTING_VERSION_1 || settings.version == SETTING_NULL_VERSION)
     {
-        settings.version = VERSION_1;
+        settings.version = SETTING_VERSION_1;
         settings.ubidots_update_frequency_s = default_ubidots_update_frequency_s;
     }
 
@@ -23,7 +34,7 @@ void SettingManager::get_from_eeprom()
     EEPROM.get(SETTING_EEPROM_ADDRESS, settings);
 
     // Upgrade if out of date
-    if (settings.version < CURRENT_VERSION || settings.version == NULL_VERSION)
+    if (settings.version < SETTING_CURRENT_VERSION || settings.version == SETTING_NULL_VERSION)
     {
         upgrade_settings();
     }
@@ -53,15 +64,6 @@ String SettingManager::setting_string()
 
     return message;
 };
-
-void SettingManager::setup()
-{
-    Particle.function("settings-ubidots_update_seconds",
-                      &SettingManager::change_ubidot_update_seconds,
-                      this);
-};
-
-void SettingManager::loop(){};
 
 int SettingManager::change_ubidot_update_seconds(String message)
 {

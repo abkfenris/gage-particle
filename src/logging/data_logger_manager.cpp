@@ -58,3 +58,5 @@ void DataLoggerManager::add_logger(DataLogger &logger)
 {
     loggers.push_back(logger);
 };
+
+DataLoggerManager DataLog;

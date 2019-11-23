@@ -26,9 +26,9 @@ void SerialLogger::log_message(String message)
     Serial.println(message);
 }
 
-void SerialLogger::persist_values()
+String SerialLogger::key_value_string()
 {
-    Serial.println("Current values:");
+    String output = "\n\nCurrent values:";
 
     std::map<char *, float>::iterator iter;
 
@@ -37,10 +37,19 @@ void SerialLogger::persist_values()
         char *key = iter->first;
         float value = iter->second;
 
-        Serial.println("  " + String(key) + ": " + String(value));
+        output = String(output + "\n  " + key + ": " + String(value));
     }
 
+    output = String(output + "\n");
+
     data.clear();
+
+    return output;
+}
+
+void SerialLogger::persist_values()
+{
+    Serial.print(key_value_string());
 }
 
 void SerialLogger::update_settings(struct Settings settings) {}
