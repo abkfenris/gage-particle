@@ -57,7 +57,7 @@ public:
     void add_value(char *key, float value);
 
     // Ignored. Messages are not sent to Ubidots
-    void log_message(char *message);
+    void log_message(String message);
 
     // Immediately send values to Ubidots
     void persist_values();

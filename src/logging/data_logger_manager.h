@@ -40,7 +40,7 @@ public:
      * 
      * @param message String message to be logged
      */
-    void log_message(char *message);
+    void log_message(String message);
 
     // Have all loggers persist their current values
     void persist_values();

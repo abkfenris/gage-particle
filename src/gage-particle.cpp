@@ -16,13 +16,14 @@
 
 #include "logging/data_logger_manager.h"
 #include "logging/ubidots_logger.h"
+#include "logging/serial_logger.h"
 
 #include "temp_sensor.h"
 #include "distance_sensor.h"
 
 void setup();
 void loop();
-#line 17 "/Users/akerney/Geek/Gage/gage-particle/src/gage-particle.ino"
+#line 18 "/Users/akerney/Geek/Gage/gage-particle/src/gage-particle.ino"
 #define DHTPIN A2                              // temperature sensor pin
 const int DEFAULT_UBIDOTS_UPDATE_SECONDS = 30; // Default amount of time between updating Ubidots
 char *WEBHOOK_NAME = "Ubidots";                // Webhook name that Ubidots listens to
@@ -35,6 +36,7 @@ NetworkManager network_manager;
 
 DataLoggerManager logger_manager;
 UbidotsLogger ubidots_logger(WEBHOOK_NAME, setting_manager.current_settings());
+SerialLogger serial_logger;
 
 TempSensor tempSensor(DHTPIN);
 DistanceSensor distance;
@@ -44,14 +46,16 @@ void setup()
   Serial.begin(9600);
 
   setting_manager.setup();
-  Serial.println(setting_manager.setting_string());
 
   network_manager.setup();
 
   logger_manager.add_logger(ubidots_logger);
+  logger_manager.add_logger(serial_logger);
   logger_manager.setup();
+  logger_manager.log_message(setting_manager.setting_string());
+  logger_manager.log_message(network_manager.current_networks());
 
-  Serial.println("Begin readings!");
+  logger_manager.log_message("Begin readings!");
 
   tempSensor.setup();
   distance.setup();

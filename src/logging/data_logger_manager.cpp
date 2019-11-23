@@ -27,7 +27,7 @@ void DataLoggerManager::add_value(char *key, float value)
     }
 }
 
-void DataLoggerManager::log_message(char *message)
+void DataLoggerManager::log_message(String message)
 {
     std::list<std::reference_wrapper<DataLogger>>::iterator logger_iter;
     for (logger_iter = loggers.begin(); logger_iter != loggers.end(); logger_iter++)

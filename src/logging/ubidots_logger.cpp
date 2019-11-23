@@ -33,7 +33,7 @@ void UbidotsLogger::add_value(char *key, float value)
     }
 }
 
-void UbidotsLogger::log_message(char *message){};
+void UbidotsLogger::log_message(String message){};
 
 void UbidotsLogger::persist_values()
 {

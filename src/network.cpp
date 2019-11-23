@@ -6,8 +6,6 @@ void NetworkManager::setup()
     Particle.function("wifi_add_network",
                       &NetworkManager::add_network,
                       this);
-
-    Serial.println(current_networks());
 #endif
 }
 

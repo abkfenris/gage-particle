@@ -42,7 +42,7 @@ public:
      * 
      * @param message Message to be immediately logged.
      */
-    virtual void log_message(char *message) = 0;
+    virtual void log_message(String message) = 0;
 
     /**
      * Persist any known values immediately.
