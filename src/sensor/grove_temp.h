@@ -19,7 +19,7 @@ class GroveTempSensor : public Sensor
 {
 private:
     // Milliseconds when the sensor was last read
-    int last_update_ms;
+    unsigned long last_update_ms;
     // Last read sensor value
     float last_temp_f;
     // sensor

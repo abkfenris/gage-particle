@@ -19,10 +19,10 @@ class SerialLogger : public DataLogger
 {
 private:
     // How many milliseconds between updates
-    int update_interval_ms = SERIAL_UPDATE_INTERVAL_MS;
+    unsigned long update_interval_ms = SERIAL_UPDATE_INTERVAL_MS;
 
     // Milliseconds of last update
-    int last_update_ms;
+    unsigned long last_update_ms;
 
     // Mapping of descriptive keys to data values
     std::map<char *, float> data;

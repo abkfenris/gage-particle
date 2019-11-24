@@ -14,7 +14,7 @@
 #include "logging/data_logger_manager.h"
 
 // Number of samples that should be kept in the statistics history
-const int NUMBER_OF_SAMPLES = 20;
+const int NUMBER_OF_SAMPLES = 100;
 
 /**
  * Maxbotix Distance Sensor
@@ -27,7 +27,7 @@ private:
      */
     Statistics stats;
     // Milliseconds when the sensor was last read
-    int last_update_ms;
+    unsigned long last_update_ms;
 
 public:
     MaxbotixDistanceSensor();

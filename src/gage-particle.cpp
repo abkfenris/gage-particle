@@ -16,8 +16,8 @@
 #include "settings_manager.h"
 #include "network.h"
 
-#include "logging/ubidots_logger.h"
 #include "logging/serial_logger.h"
+#include "logging/publish_logger.h"
 
 #include "sensor/grove_temp.h"
 #include "sensor/maxbotix_serial_distance.h"
@@ -31,39 +31,55 @@ char *WEBHOOK_NAME = "Ubidots";                // Webhook name that Ubidots list
 
 // SYSTEM_THREAD(ENABLED);
 
+// Initialize our key systems
+
+// Settings manager persists settings to the EEPROM
+// and exposes Particle.functions for changing them
 SettingManager setting_manager(DEFAULT_UBIDOTS_UPDATE_SECONDS);
 
+// Network manager helps manage Wifi networks on an Argon
 NetworkManager network_manager;
 
-UbidotsLogger ubidots_logger(WEBHOOK_NAME, setting_manager.current_settings());
+// Now for the specific loggers that should be registered to the DataLog
 SerialLogger serial_logger;
+PublishLogger publish_logger(WEBHOOK_NAME, setting_manager.current_settings());
 
+// Finally our sensors
 GroveTempSensor tempSensor(DHTPIN);
 MaxbotixDistanceSensor distance;
 
 void setup()
 {
-  DataLog.add_logger(ubidots_logger);
+  // We first add our loggers in setup, so they are avaliable
+  // when other instances run through their setup.
   DataLog.add_logger(serial_logger);
+  DataLog.add_logger(publish_logger);
   DataLog.setup();
 
+  // Run through common setups/
   setting_manager.setup();
   network_manager.setup();
 
   DataLog.log_message("Begin readings!");
 
+  // Finally setup our sensors
   tempSensor.setup();
   distance.setup();
 }
 
 void loop()
 {
+  // First we loop through system level management
   setting_manager.loop();
   network_manager.loop();
 
+  // Then the sensor loops run which allows them to
+  // register values with the DataLog before they run
   tempSensor.loop();
   distance.loop();
 
+  // DataLog updates settings of any loggers that may have changes,
+  // Then completes the loggers complete their own loops.
   DataLog.update_settings(setting_manager.current_settings());
   DataLog.loop();
 }

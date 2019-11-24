@@ -10,8 +10,8 @@
 #include "settings_manager.h"
 #include "network.h"
 
-#include "logging/ubidots_logger.h"
 #include "logging/serial_logger.h"
+#include "logging/publish_logger.h"
 
 #include "sensor/grove_temp.h"
 #include "sensor/maxbotix_serial_distance.h"
@@ -32,8 +32,8 @@ SettingManager setting_manager(DEFAULT_UBIDOTS_UPDATE_SECONDS);
 NetworkManager network_manager;
 
 // Now for the specific loggers that should be registered to the DataLog
-UbidotsLogger ubidots_logger(WEBHOOK_NAME, setting_manager.current_settings());
 SerialLogger serial_logger;
+PublishLogger publish_logger(WEBHOOK_NAME, setting_manager.current_settings());
 
 // Finally our sensors
 GroveTempSensor tempSensor(DHTPIN);
@@ -43,8 +43,8 @@ void setup()
 {
   // We first add our loggers in setup, so they are avaliable
   // when other instances run through their setup.
-  DataLog.add_logger(ubidots_logger);
   DataLog.add_logger(serial_logger);
+  DataLog.add_logger(publish_logger);
   DataLog.setup();
 
   // Run through common setups/

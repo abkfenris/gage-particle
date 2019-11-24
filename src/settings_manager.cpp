@@ -88,4 +88,5 @@ int SettingManager::change_ubidot_update_seconds(String message)
         settings.ubidots_update_frequency_s = value;
         persist_to_eeprom();
     }
+    return value;
 }
