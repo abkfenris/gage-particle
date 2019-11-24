@@ -169,7 +169,8 @@ Ubidots offers a [free STEM offering](https://ubidots.com/stem/) which makes for
 
 - Switch to using a median rather than a mean for sensor statistics.
 - ~~Use Real Time Clock~~
-- Log data to microSD card
+- ~~Log data to microSD card~~
 - Use semi-automatic and ~~threaded~~ system modes
 - Manage cellular/wifi connections in `NetworkManager`
 - Get it in the field for testing
+- Figure out how to sleep the system and for how long

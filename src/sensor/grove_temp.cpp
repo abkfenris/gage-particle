@@ -1,6 +1,6 @@
 #include "sensor/grove_temp.h"
 
-#define MINIMUM_BETWEEN_READINGS_MS 1000
+#define MINIMUM_BETWEEN_READINGS_MS 10000
 
 GroveTempSensor::GroveTempSensor(byte dhtPin) : dht(dhtPin)
 {
@@ -16,6 +16,7 @@ void GroveTempSensor::loop()
 {
     if (millis() - last_update_ms >= MINIMUM_BETWEEN_READINGS_MS)
     {
+        last_update_ms = millis();
         last_temp_f = dht.getTempFarenheit();
         DataLog.add_value("temperature", value());
     }

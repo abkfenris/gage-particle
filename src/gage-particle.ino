@@ -5,7 +5,9 @@
  * Date: 2019-03-06
  */
 
+#include "SdFat.h"
 #include "AdafruitDataLoggerRK.h"
+#include "SdCardLogHandlerRK.h"
 
 #include "logging/data_logger_manager.h"
 
@@ -14,6 +16,7 @@
 
 #include "logging/serial_logger.h"
 #include "logging/publish_logger.h"
+#include "logging/sd_logger.h"
 
 #include "sensor/grove_temp.h"
 #include "sensor/maxbotix_serial_distance.h"
@@ -31,6 +34,14 @@ SYSTEM_THREAD(ENABLED);
 // Output via DataLog loggers
 SerialLogHandler log_handler;
 
+// MicroSD card access and print logger need to be initialized early,
+// And configuration needs to happen at startup, rather than in a
+// Specific logger.
+SdFat sd;
+const int SD_CHIP_SELECT = D5;
+SdCardPrintHandler sd_print(sd, SD_CHIP_SELECT, SPI_FULL_SPEED);
+STARTUP(sd_print.withMaxFilesToKeep(10000));
+
 RTCSynchronizer rtc_sync;
 
 // Settings manager persists settings to the EEPROM
@@ -43,6 +54,7 @@ NetworkManager network_manager;
 // Now for the specific loggers that should be registered to the DataLog
 SerialLogger serial_logger;
 PublishLogger publish_logger(WEBHOOK_NAME, setting_manager.current_settings());
+SDLogger sd_logger(sd_print);
 
 // Finally our sensors
 GroveTempSensor tempSensor(DHTPIN);
@@ -55,6 +67,7 @@ void setup()
   // when other instances run through their setup.
   DataLog.add_logger(serial_logger);
   DataLog.add_logger(publish_logger);
+  DataLog.add_logger(sd_logger);
   DataLog.setup();
 
   // Run through common setups/
