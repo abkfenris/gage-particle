@@ -11,6 +11,8 @@
  * Date: 2019-03-06
  */
 
+#include "AdafruitDataLoggerRK.h"
+
 #include "logging/data_logger_manager.h"
 
 #include "settings_manager.h"
@@ -24,14 +26,18 @@
 
 void setup();
 void loop();
-#line 19 "/Users/akerney/Geek/Gage/gage-particle/src/gage-particle.ino"
+#line 21 "/Users/akerney/Geek/Gage/gage-particle/src/gage-particle.ino"
 #define DHTPIN A2                              // temperature sensor pin
 const int DEFAULT_UBIDOTS_UPDATE_SECONDS = 30; // Default amount of time between updating Ubidots
 char *WEBHOOK_NAME = "Ubidots";                // Webhook name that Ubidots listens to
 
-// SYSTEM_THREAD(ENABLED);
+SYSTEM_THREAD(ENABLED);
 
 // Initialize our key systems
+
+// log system info to Serial
+SerialLogHandler log_handler;
+RTCSynchronizer rtc_sync;
 
 // Settings manager persists settings to the EEPROM
 // and exposes Particle.functions for changing them
@@ -50,6 +56,7 @@ MaxbotixDistanceSensor distance;
 
 void setup()
 {
+  rtc_sync.setup();
   // We first add our loggers in setup, so they are avaliable
   // when other instances run through their setup.
   DataLog.add_logger(serial_logger);
@@ -70,6 +77,7 @@ void setup()
 void loop()
 {
   // First we loop through system level management
+  rtc_sync.loop();
   setting_manager.loop();
   network_manager.loop();
 

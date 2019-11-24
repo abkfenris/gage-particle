@@ -1,5 +1,8 @@
 /**
- * Log data via Particle.publish
+ * Log data via Particle.publish.
+ * 
+ * When SYSTEM_THREAD(ENABLED) it makes it's best effort
+ * at publishing, but won't block if it can't publish.
  * 
  * @author Alex Kerney
  */
