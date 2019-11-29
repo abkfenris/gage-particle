@@ -7,10 +7,9 @@
 #define MaxbotixDistanceSensor_h
 
 #include "Particle.h"
-#include "stats/Statistics.h"
 #include "math.h"
 
-#include "sensor/sensor.h"
+#include "sensor/sampled_sensor.h"
 #include "logging/data_logger_manager.h"
 
 // Number of samples that should be kept in the statistics history
@@ -19,19 +18,17 @@ const int NUMBER_OF_SAMPLES = 100;
 /**
  * Maxbotix Distance Sensor
  */
-class MaxbotixDistanceSensor : public Sensor
+// class MaxbotixDistanceSensor : public Sensor
+class MaxbotixDistanceSensor : SampledSensor
 {
-private:
-    /**
-     * Running statistics of samples that are collected at the sensor update frequency
-     */
-    Statistics stats;
+protected:
     // Milliseconds when the sensor was last read
     unsigned long last_update_ms;
 
-public:
-    MaxbotixDistanceSensor();
+    // Milliseconds when the sensor was last logged
+    unsigned long last_log_ms;
 
+public:
     /**
      * Starts the serial connection to the ultrasonic sensor,
      * and sets the update timing
@@ -44,10 +41,8 @@ public:
     // Return the millimeters from the sensor
     int read_sensor();
 
-    // Return the mean of the last 20 samples
+    // Return the mean of the last 100 samples
     float value();
-    // Return the current standard deviation
-    float std_deviation();
 };
 
 #endif

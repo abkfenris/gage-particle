@@ -135,7 +135,7 @@ There are a few external dependencies.
 - [Seeed-Studio/https://github.com/Seeed-Studio/Grove_Temperature_And_Humidity_Sensor](https://github.com/Seeed-Studio/Grove_Temperature_And_Humidity_Sensor) for the current temperature sensor.
 - [rickkas7/PublishQueueAsyncRK](https://github.com/rickkas7/PublishQueueAsyncRK) for pushing in the background, and persisting publish backlogs when there is no connection. _Not implemented yet._
 - [rickkas7/JsonParserGeneratorRK](https://github.com/rickkas7/JsonParserGeneratorRK) for forming Ubidots compatible publish JSON.
-- [rickkas7/SDCardLogHandlerRK](https://github.com/rickkas7/SdCardLogHandlerRK) for logging data to microSD card and avoiding dealing with [SDFat](https://github.com/greiman/SdFat) directly. _Not implemented yet._
+- [rickkas7/SDCardLogHandlerRK](https://github.com/rickkas7/SdCardLogHandlerRK) for logging data to microSD card and avoiding dealing with [SDFat](https://github.com/greiman/SdFat) directly.
 
 #### [Particle.io Functions](https://docs.particle.io/reference/device-os/firmware/boron/#particle-function-)
 
@@ -174,3 +174,5 @@ Ubidots offers a [free STEM offering](https://ubidots.com/stem/) which makes for
 - Manage cellular/wifi connections in `NetworkManager`
 - Get it in the field for testing
 - Figure out how to sleep the system and for how long
+- ~~Track battery state.~~
+- If there are too many keys the publish gets truncated

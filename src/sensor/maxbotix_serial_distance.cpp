@@ -2,13 +2,15 @@
 
 #define MINIMUM_READABLE_DISTANCE_MM 500
 #define MAXIMUM_READABLE_DISTANCE_MM 9999
-#define MINIMUM_BETWEEN_READINGS_MS 200
+#define ERROR_READING_MM 999
 
-MaxbotixDistanceSensor::MaxbotixDistanceSensor() : stats(NUMBER_OF_SAMPLES){};
+#define MINIMUM_BETWEEN_READINGS_MS 200
+#define MINIMUM_BETWEEN_LOGS_MS 10000
 
 void MaxbotixDistanceSensor::setup()
 {
     last_update_ms = millis() - MINIMUM_BETWEEN_READINGS_MS;
+
     Serial1.begin(9600);
 }
 
@@ -17,13 +19,18 @@ void MaxbotixDistanceSensor::loop()
     if (millis() - last_update_ms >= MINIMUM_BETWEEN_READINGS_MS)
     {
         int distance_mm = read_sensor();
-        if (MINIMUM_READABLE_DISTANCE_MM <= distance_mm && distance_mm < MAXIMUM_READABLE_DISTANCE_MM)
+        if (MINIMUM_READABLE_DISTANCE_MM < distance_mm && distance_mm < MAXIMUM_READABLE_DISTANCE_MM && distance_mm != ERROR_READING_MM)
         {
-            stats.addData(distance_mm);
+            add(distance_mm);
+
             last_update_ms = millis();
 
-            DataLog.add_value("distance", value());
-            DataLog.add_value("std_dev", std_deviation());
+            if (millis() - last_log_ms >= MINIMUM_BETWEEN_LOGS_MS)
+            {
+                DataLog.add_value("distance", value());
+                DataLog.add_value("std_dev", stddev());
+                DataLog.add_value("median", median());
+            }
         }
     }
 }
@@ -62,10 +69,5 @@ int MaxbotixDistanceSensor::read_sensor()
 
 float MaxbotixDistanceSensor::value()
 {
-    return stats.mean();
-}
-
-float MaxbotixDistanceSensor::std_deviation()
-{
-    return stats.stdDeviation();
+    return mean();
 }

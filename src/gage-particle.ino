@@ -20,6 +20,8 @@
 
 #include "sensor/grove_temp.h"
 #include "sensor/maxbotix_serial_distance.h"
+#include "sensor/maxbotix_pwm_distance.h"
+#include "sensor/battery_sensor.h"
 
 #define DHTPIN A2                              // temperature sensor pin
 const int DEFAULT_UBIDOTS_UPDATE_SECONDS = 30; // Default amount of time between updating Ubidots
@@ -40,7 +42,7 @@ SerialLogHandler log_handler;
 SdFat sd;
 const int SD_CHIP_SELECT = D5;
 SdCardPrintHandler sd_print(sd, SD_CHIP_SELECT, SPI_FULL_SPEED);
-STARTUP(sd_print.withMaxFilesToKeep(10000));
+STARTUP(sd_print.withDesiredFileSize(100000000).withMaxFilesToKeep(100));
 
 RTCSynchronizer rtc_sync;
 
@@ -59,6 +61,8 @@ SDLogger sd_logger(sd_print);
 // Finally our sensors
 GroveTempSensor tempSensor(DHTPIN);
 MaxbotixDistanceSensor distance;
+MaxbotixPWMDistanceSensor distance_pwm;
+BatterySensor battery;
 
 void setup()
 {
@@ -79,6 +83,8 @@ void setup()
   // Finally setup our sensors
   tempSensor.setup();
   distance.setup();
+  distance_pwm.setup();
+  battery.setup();
 }
 
 void loop()
@@ -92,6 +98,8 @@ void loop()
   // register values with the DataLog before they run
   tempSensor.loop();
   distance.loop();
+  distance_pwm.loop();
+  battery.loop();
 
   // DataLog updates settings of any loggers that may have changes,
   // Then completes the loggers complete their own loops.
