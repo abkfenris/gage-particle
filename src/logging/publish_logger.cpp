@@ -1,5 +1,7 @@
 #include "logging/publish_logger.h"
 
+#define PUBLISH_STARTUP_DELAY_MS 10000
+
 PublishLogger::PublishLogger(char *set_webhook_name, struct Settings settings)
 {
     webhook_name = set_webhook_name;
@@ -8,7 +10,7 @@ PublishLogger::PublishLogger(char *set_webhook_name, struct Settings settings)
 
 void PublishLogger::setup()
 {
-    last_update_ms = millis() - update_interval_ms;
+    last_update_ms = millis() - update_interval_ms + PUBLISH_STARTUP_DELAY_MS;
 }
 
 void PublishLogger::loop()
@@ -36,9 +38,9 @@ void PublishLogger::log_message(String message){};
 void PublishLogger::persist_values()
 {
     std::map<char *, ValueTime>::iterator iter;
-    JsonWriterStatic<256> jw;
+    JsonWriterStatic<512> jw;
 
-    jw.setFloatPlaces(1);
+    jw.setFloatPlaces(2);
     jw.startObject();
 
     for (iter = data.begin(); iter != data.end(); iter++)
