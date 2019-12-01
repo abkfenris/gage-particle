@@ -25,7 +25,7 @@ void MaxbotixDistanceSensor::loop()
 
             last_update_ms = millis();
 
-            if (millis() - last_log_ms >= MINIMUM_BETWEEN_LOGS_MS)
+            if (millis() - last_log_ms >= MINIMUM_BETWEEN_LOGS_MS && added_count >= 10)
             {
                 DataLog.add_value("distance", value());
                 DataLog.add_value("std_dev", stddev());
@@ -35,27 +35,35 @@ void MaxbotixDistanceSensor::loop()
     }
 }
 
-int MaxbotixDistanceSensor::read_sensor()
+int MaxbotixDistanceSensor::read_sensor() // adapted from https://community.particle.io/t/maxbotix-sensor-and-ttl-serial/36831/13
 {
+    char buf[7];
+    unsigned long timeout_ms = 0;
 
     while (Serial1.available())
     {
         if (Serial1.peek() == 'R')
         {
-            // pop off the R
-            Serial1.read();
-
-            char buf[5];
-
-            for (int i = 0; i < 4; i++)
+            if (!timeout_ms)
             {
-                char data = Serial1.read();
-                buf[i] = data;
+                timeout_ms = millis(); // store timestamp when  R is found
             }
 
-            int distance_mm = atoi(buf);
+            if (Serial1.available() >= 5)
+            {
+                memset(buf, 0x00, sizeof(buf));
 
-            return distance_mm;
+                Serial1.readBytes(buf, 6);
+
+                int distance_mm = atoi(&buf[1]);
+
+                return distance_mm;
+            }
+            else if (millis() - timeout_ms > 1000)
+            {
+                Serial1.read(); // flush outdated R
+                timeout_ms = 0;
+            }
         }
         else
         {

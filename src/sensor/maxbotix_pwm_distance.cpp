@@ -27,7 +27,7 @@ void MaxbotixPWMDistanceSensor::loop()
 
             last_update_ms = millis();
 
-            if (millis() - last_log_ms >= MINIMUM_BETWEEN_LOGS_MS)
+            if (millis() - last_log_ms >= MINIMUM_BETWEEN_LOGS_MS && added_count >= 10)
             {
                 last_log_ms = millis();
 
