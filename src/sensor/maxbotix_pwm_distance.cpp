@@ -2,8 +2,9 @@
 
 // Use a little bit larger range for error readings
 // As PWM can sometimes be a bit less percise
+// Especially at the high end
 #define MINIMUM_READABLE_DISTANCE_MM 600
-#define MAXIMUM_READABLE_DISTANCE_MM 9900
+#define MAXIMUM_READABLE_DISTANCE_MM 9500
 #define ERROR_READING_MM 999
 
 #define MINIMUM_BETWEEN_READINGS_MS 200

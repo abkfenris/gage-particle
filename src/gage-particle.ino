@@ -42,7 +42,7 @@ SerialLogHandler log_handler;
 SdFat sd;
 const int SD_CHIP_SELECT = D5;
 SdCardPrintHandler sd_print(sd, SD_CHIP_SELECT, SPI_FULL_SPEED);
-STARTUP(sd_print.withDesiredFileSize(100000000).withMaxFilesToKeep(100));
+STARTUP(sd_print.withMaxFilesToKeep(1000));
 
 RTCSynchronizer rtc_sync;
 
