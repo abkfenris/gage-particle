@@ -32,7 +32,7 @@ String SerialLogger::key_value_string()
 
     std::map<char *, float>::iterator iter;
 
-    for (iter = data.begin(); iter != data.end(); iter++)
+    for (iter = data.begin(); iter != data.end(); ++iter)
     {
         char *key = iter->first;
         float value = iter->second;

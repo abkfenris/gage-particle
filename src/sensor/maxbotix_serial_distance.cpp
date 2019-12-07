@@ -61,14 +61,20 @@ int MaxbotixDistanceSensor::read_sensor() // adapted from https://community.part
             }
             else if (millis() - timeout_ms > 1000)
             {
-                Serial1.read(); // flush outdated R
-                timeout_ms = 0;
+                if (Serial1.available() > 0)
+                {
+                    Serial1.read(); // flush outdated R
+                    timeout_ms = 0;
+                }
             }
         }
         else
         {
-            // Not an R, try to clear
-            Serial1.read();
+            if (Serial1.available() > 0)
+            {
+                // Not an R, try to clear
+                Serial1.read();
+            }
         }
 
         delay(MINIMUM_BETWEEN_READINGS_MS);

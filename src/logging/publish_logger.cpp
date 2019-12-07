@@ -43,7 +43,7 @@ void PublishLogger::persist_values()
     jw.setFloatPlaces(2);
     jw.startObject();
 
-    for (iter = data.begin(); iter != data.end(); iter++)
+    for (iter = data.begin(); iter != data.end(); ++iter)
     {
         char *key = iter->first;
         struct ValueTime value_time = iter->second;
