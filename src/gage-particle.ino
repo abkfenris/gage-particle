@@ -36,6 +36,8 @@ SYSTEM_THREAD(ENABLED);
 // Output via DataLog loggers
 SerialLogHandler log_handler;
 
+ApplicationWatchdog wd(60000, System.reset);
+
 // MicroSD card access and print logger need to be initialized early,
 // And configuration needs to happen at startup, rather than in a
 // Specific logger.
@@ -105,4 +107,6 @@ void loop()
   // Then completes the loggers complete their own loops.
   DataLog.update_settings(setting_manager.current_settings());
   DataLog.loop();
+
+  wd.checkin();
 }

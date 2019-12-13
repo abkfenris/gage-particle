@@ -7,6 +7,7 @@
 #define SampleSensor_h
 
 #include "math.h"
+// #include <deque>
 
 #include "sensor/sensor.h"
 
@@ -23,6 +24,7 @@ protected:
     float samples[SAMPLED_SENSOR_NUMBER_OF_SAMPLES] = {};
     int insert_index = 0;
     int added_count = 0;
+    // std::deque<float> queue = {};
 
     void add(float value);
     float mean();

@@ -3,32 +3,32 @@
 // Use a little bit larger range for error readings
 // As PWM can sometimes be a bit less percise
 // Especially at the high end
-#define MINIMUM_READABLE_DISTANCE_MM 600
-#define MAXIMUM_READABLE_DISTANCE_MM 9500
-#define ERROR_READING_MM 999
+#define PWM_MINIMUM_READABLE_DISTANCE_MM 600
+#define PWM_MAXIMUM_READABLE_DISTANCE_MM 9000
+#define PWM_ERROR_READING_MM 999
 
-#define MINIMUM_BETWEEN_READINGS_MS 200
-#define MINIMUM_BETWEEN_LOGS_MS 10000
+#define PWM_MINIMUM_BETWEEN_READINGS_MS 200
+#define PWM_MINIMUM_BETWEEN_LOGS_MS 10000
 
 void MaxbotixPWMDistanceSensor::setup()
 {
-    last_update_ms = millis() - MINIMUM_BETWEEN_READINGS_MS;
-    last_log_ms = millis() - MINIMUM_BETWEEN_LOGS_MS;
+    last_update_ms = millis() - PWM_MINIMUM_BETWEEN_READINGS_MS;
+    last_log_ms = millis() - PWM_MINIMUM_BETWEEN_LOGS_MS;
     pinMode(MAXBOTIX_ULTRASOUND_PWM_PIN, INPUT);
 }
 
 void MaxbotixPWMDistanceSensor::loop()
 {
-    if (millis() - last_update_ms >= MINIMUM_BETWEEN_READINGS_MS)
+    if (millis() - last_update_ms >= PWM_MINIMUM_BETWEEN_READINGS_MS)
     {
         int distance_mm = read_sensor();
-        if (MINIMUM_READABLE_DISTANCE_MM < distance_mm && distance_mm < MAXIMUM_READABLE_DISTANCE_MM && distance_mm != ERROR_READING_MM)
+        if ((PWM_MINIMUM_READABLE_DISTANCE_MM < distance_mm) && (distance_mm < PWM_MAXIMUM_READABLE_DISTANCE_MM) && (distance_mm != PWM_ERROR_READING_MM))
         {
             add(distance_mm);
 
             last_update_ms = millis();
 
-            if (millis() - last_log_ms >= MINIMUM_BETWEEN_LOGS_MS && added_count >= 10)
+            if (millis() - last_log_ms >= PWM_MINIMUM_BETWEEN_LOGS_MS && added_count >= 10)
             {
                 last_log_ms = millis();
 
