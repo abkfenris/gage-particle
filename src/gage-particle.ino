@@ -19,7 +19,7 @@
 #include "logging/sd_logger.h"
 
 #include "sensor/grove_temp.h"
-#include "sensor/maxbotix_serial_distance.h"
+#include "sensor/tfmini_plus_lidar_distance.h"
 #include "sensor/maxbotix_pwm_distance.h"
 #include "sensor/battery_sensor.h"
 
@@ -35,6 +35,8 @@ SYSTEM_THREAD(ENABLED);
 // Remove to only have messages and values
 // Output via DataLog loggers
 SerialLogHandler log_handler;
+
+ApplicationWatchdog wd(60000, System.reset);
 
 // MicroSD card access and print logger need to be initialized early,
 // And configuration needs to happen at startup, rather than in a
@@ -60,8 +62,8 @@ SDLogger sd_logger(sd_print);
 
 // Finally our sensors
 GroveTempSensor tempSensor(DHTPIN);
-MaxbotixDistanceSensor distance;
 MaxbotixPWMDistanceSensor distance_pwm;
+TfMiniPlusLidarDistanceSensor lidar;
 BatterySensor battery;
 
 void setup()
@@ -82,7 +84,7 @@ void setup()
 
   // Finally setup our sensors
   tempSensor.setup();
-  distance.setup();
+  lidar.setup();
   distance_pwm.setup();
   battery.setup();
 }
@@ -97,7 +99,7 @@ void loop()
   // Then the sensor loops run which allows them to
   // register values with the DataLog before they run
   tempSensor.loop();
-  distance.loop();
+  lidar.loop();
   distance_pwm.loop();
   battery.loop();
 
@@ -105,4 +107,6 @@ void loop()
   // Then completes the loggers complete their own loops.
   DataLog.update_settings(setting_manager.current_settings());
   DataLog.loop();
+
+  wd.checkin();
 }

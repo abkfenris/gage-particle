@@ -3,6 +3,7 @@
 void SampledSensor::add(float value)
 {
     samples[insert_index] = value;
+    // queue.push_back(value);
 
     insert_index++;
 
@@ -15,6 +16,11 @@ void SampledSensor::add(float value)
     {
         added_count++;
     }
+
+    // if (queue.size() >= number_of_samples)
+    // {
+    //     queue.pop_front();
+    // }
 }
 
 float SampledSensor::mean()

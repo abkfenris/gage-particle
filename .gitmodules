@@ -1,0 +1,3 @@
+[submodule "lib/TFMiniPlus"]
+	path = lib/TFMiniPlus
+	url = https://github.com/abkfenris/TFMiniPlus.git

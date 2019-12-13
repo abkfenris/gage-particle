@@ -11,9 +11,11 @@ My goal with this project is to develop a low cost gage that is simple enough fo
 
 ## Current status
 
-Under development. Specifically in pieces on my desk.
+Under development. Somewhere between in pieces on my desk, hanging off my porch, or hanging off a sea wall to get a tidal water signal for sensor testing.
 
 ![Running on my desk](docs/IMG_4246.jpg)
+
+![Case](docs/case.jpg)
 
 ## Learnings from last time
 
@@ -46,15 +48,18 @@ Also:
   - The microSD is used to store device logs, and data.
   - The real time clock is used to keep track of time for the Particle as it doesn't have a backup clock for when it's shutdown or in sleep mode.
   - Requires a [CR1220](https://www.adafruit.com/product/380) coin cell battery (~$.95) and a [microSD card](https://www.adafruit.com/product/1294) (~$9.95).
-- [Adafruit Feather Doubler](https://www.adafruit.com/product/2890) - \$7.50
+- [Adafruit Feather Tripler](https://www.adafruit.com/product/3417) - \$8.50
   - Allows the Particle board and Adafruit logger to be mounted side by side. It also gives some prototyping space for wiring up sensors.
-  - I'm current using some [Configurable Spring Terminal Blocks](https://www.adafruit.com/product/1074) (\$4.95) to connect the sensors to the board.
-- [Maxbotix MB7386 NRXL-MaxSonar-WRLT](https://www.maxbotix.com/Ultrasonic_Sensors/MB7386.htm) ultrasonic distance sensor - \$199.95
+  - I'm current using some [Terminal Blocks](https://www.adafruit.com/product/2137) (~\$1.55) to connect the sensors to the board.
+- [Maxbotix MB7386 NRXL-MaxSonar-WRLT](https://www.maxbotix.com/Ultrasonic_Sensors/MB7386.htm) ultrasonic distance sensor - \$119.95
   - We have to find out how far away the water is somehow right? This way our sensor doesn't have to be in the water and the gage can be self contained.
   - This sensor works from .5 to 10 meters, and is supposed to be pretty good for water.
   - It's weather sealed (important for the parts of the device that will be outside the box).
   - It communicates over TTL serial, analog, and pulse width modulation. TTL serial means that we can read the exact millimeters the sensor is picking up instead of trying to calculate voltage differences (analog).
   - [Mounting hardware](https://www.maxbotix.com/Ultrasonic_Sensors/MB7950.htm) (\$3.00) for mounting the sensor in a drilled out hole and keeping it water tight.
+- [Benewake TFMiniPlus](https://www.robotshop.com/en/benewake-tfmini-plus-micro-lidar-module-uart-i2c-12-m.html) LIDAR distance sensor - \$44.90
+  - A new method to compare to the output of the ultrasonic sensor.
+  - It may not work as well on a water surface as the ultrasonic sensor.
 - Temperature sensor - currently a hacked together Seeed Studio Grove sensor as I had it laying around.
   - Will probably switch to [AM2303 temp-humidity sensor](https://www.adafruit.com/product/393) (\$15.00) or similar.
   - A temperature sensor should not be neccessary for operation, however lithium batteries are not the largest fans of being charged in very cold or very warm temperatures, so it would be useful to manage charging if those temperatures are encountered.
@@ -64,10 +69,11 @@ Also:
   - I have two of these panels left over from my previous experiment which needed a lot of power. I have heard of folks using 1 watt panels with the Particle mesh devices.
   - Also needs a [microUSB adapter](https://voltaicsystems.com/f3511-microusb/) (\$6.00).
 - Waterproof storage box
-  - I've been using a [sprinkler system box](https://www.amazon.com/gp/product/B000VYGMF2/) (~\$33.48) that is very oversized for the Particle board, but it was sized for 12V battery and charging system for the previous incantation of the gage. Nicely, it does have two predrilled ports, one that is the right size for the ultrasonic sensor.
+  - Previously I was using a [sprinkler system box](https://www.amazon.com/gp/product/B000VYGMF2/) (~\$33.48) that is very oversized for the Particle board, but it was sized for 12V battery and charging system for the previous incantation of the gage. Nicely, it does have two predrilled ports, one that is the right size for the ultrasonic sensor.
   - Probably could use some simplier outdoor electrical boxes too.
+  - Now I'm using a [Husky Plastic Tool Box](https://www.homedepot.com/p/Husky-13-5-in-Plastic-Tool-Box-in-Black-2019-002/309211038) (~\$25.00) that is a Pelican case knockoff.
 
-Currently the parts add up to around \$450 if you already have soldering, cables, and other random (wood) parts laying around.
+Currently the parts add up to around \$450 if you already have soldering, cables, and other random (wood) parts laying around for mounting.
 
 ## Software & Services
 
