@@ -46,6 +46,7 @@ void TfMiniPlusLidarDistanceSensor::loop()
                     DataLog.add_value("lidar:mean", mean());
                     DataLog.add_value("lidar:std_dev", stddev());
                     DataLog.add_value("lidar:median", median());
+                    DataLog.add_value("lidar:temp", tfmini.getSensorTemperature());
                 }
             }
         }

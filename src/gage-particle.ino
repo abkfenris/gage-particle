@@ -18,7 +18,7 @@
 #include "logging/publish_logger.h"
 #include "logging/sd_logger.h"
 
-#include "sensor/grove_temp.h"
+// #include "sensor/grove_temp.h"
 #include "sensor/tfmini_plus_lidar_distance.h"
 #include "sensor/maxbotix_pwm_distance.h"
 #include "sensor/battery_sensor.h"
@@ -61,7 +61,7 @@ PublishLogger publish_logger(WEBHOOK_NAME, setting_manager.current_settings());
 SDLogger sd_logger(sd_print);
 
 // Finally our sensors
-GroveTempSensor tempSensor(DHTPIN);
+// GroveTempSensor tempSensor(DHTPIN);
 MaxbotixPWMDistanceSensor distance_pwm;
 TfMiniPlusLidarDistanceSensor lidar;
 BatterySensor battery;
@@ -83,7 +83,7 @@ void setup()
   DataLog.log_message("Begin readings!");
 
   // Finally setup our sensors
-  tempSensor.setup();
+  // tempSensor.setup();
   lidar.setup();
   distance_pwm.setup();
   battery.setup();
@@ -98,7 +98,7 @@ void loop()
 
   // Then the sensor loops run which allows them to
   // register values with the DataLog before they run
-  tempSensor.loop();
+  // tempSensor.loop();
   lidar.loop();
   distance_pwm.loop();
   battery.loop();
